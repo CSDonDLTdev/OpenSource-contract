@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project manages smart contracts for ISIN and Investor whitelists, roles, transfers and escrow functionality. It is built using **Solidity** and **Hardhat** to deploy and test contracts on a **Hyperledger Besu** network.
+This project manages smart contracts for ISIN and Investor whitelists, roles, transfers and escrow functionality. It is built using **Solidity** and **Hardhat** to deploy and test contracts on a **Hyperledger Besu** network. 
 
 ## Project Structure
 
