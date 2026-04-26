@@ -16,11 +16,13 @@ task("grantRole")
     .addParam("role", "role to grant")
     .addParam("account", "account to grant the role to")
     .setAction(async (taskArgs, hre) => {
+        const [roleManagerSigner] = await hre.viem.getWalletClients(); //first signer (PK_CC_OWNER)
         const roleManager = await getContract(hre);
         try {
-        const txnHash = await roleManager.write.grantRole([hre.ethers.keccak256(hre.ethers.toUtf8Bytes(taskArgs.role)) as `0x${string}`, taskArgs.account]);
-        await waitForTransactionReceipt(hre, txnHash);
-        console.log("role granted");
+            const txnHash = await roleManager.write.grantRole([hre.ethers.keccak256(hre.ethers.toUtf8Bytes(taskArgs.role)) as `0x${string}`, taskArgs.account], 
+                                                              { account: roleManagerSigner.account});
+            await waitForTransactionReceipt(hre, txnHash);
+            console.log(`role granted: ${taskArgs.role} -> ${taskArgs.account}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -30,11 +32,13 @@ task("revokeRole")
     .addParam("role", "role to revoke")
     .addParam("account", "account to revoke the role from")
     .setAction(async (taskArgs, hre) => {
+        const [roleManagerSigner] = await hre.viem.getWalletClients(); //first signer (PK_CC_OWNER)
         const roleManager = await getContract(hre);
         try {
-        const txnHash = await roleManager.write.revokeRole([hre.ethers.keccak256(hre.ethers.toUtf8Bytes(taskArgs.role)) as `0x${string}`, taskArgs.account]);
-        await waitForTransactionReceipt(hre, txnHash);
-        console.log("role revoked");
+            const txnHash = await roleManager.write.revokeRole([hre.ethers.keccak256(hre.ethers.toUtf8Bytes(taskArgs.role)) as `0x${string}`, taskArgs.account], 
+                                                              { account: roleManagerSigner.account});
+            await waitForTransactionReceipt(hre, txnHash);
+            console.log(`role revoked: ${taskArgs.role} -> ${taskArgs.account}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -47,4 +51,20 @@ task("hasRole")
         const roleManager = await getContract(hre);
         const hasRole = await roleManager.read.hasRole([hre.ethers.keccak256(hre.ethers.toUtf8Bytes(taskArgs.role)) as `0x${string}`, taskArgs.account])
         console.log("has role", hasRole);
+    });
+
+task("seedRoles")
+    .setAction(async (taskArgs, hre) => {
+        await hre.run("grantRole", {
+            role: "ISIN_WL_MANAGER",
+            account: process.env.AC_ISIN_WL_MANAGER!,
+        });
+        await hre.run("grantRole", {
+            role: "INVESTOR_WL_MANAGER",
+            account: process.env.AC_INVESTOR_WL_MANAGER!,
+        });
+        await hre.run("grantRole", {
+            role: "ISIN_MINT_BURN_MANAGER",
+            account: process.env.AC_ISIN_MINT_BURN_MANAGER!,
+        });
     });

@@ -16,11 +16,12 @@ task("addInvestor")
     .addParam("wallet")
     .addParam("investortype")
     .setAction(async (taskArgs, hre) => {
+        const [, , invManagerSigner] = await hre.viem.getWalletClients(); //third signer (PK_INVESTOR_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.addInvestor([taskArgs.wallet, taskArgs.investortype]);
+            const txnHash = await whiteList.write.addInvestor([taskArgs.wallet, taskArgs.investortype], {account: invManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("investor created")
+            console.log(`investor created: ${taskArgs.wallet} -> ${taskArgs.investortype}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -30,11 +31,12 @@ task("modifyInvestorAttributes")
     .addParam("wallet")
     .addParam("investortype")
     .setAction(async (taskArgs, hre) => {
+        const [, , invManagerSigner] = await hre.viem.getWalletClients(); //third signer (PK_INVESTOR_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.modifyInvestorAttributes([taskArgs.wallet, taskArgs.investortype]);
+            const txnHash = await whiteList.write.modifyInvestorAttributes([taskArgs.wallet, taskArgs.investortype], {account: invManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("investor modified");
+            console.log(`investor modified: ${taskArgs.wallet} -> ${taskArgs.investortype}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -43,11 +45,12 @@ task("modifyInvestorAttributes")
 task("removeInvestor")
     .addParam("wallet")
     .setAction(async (taskArgs, hre) => {
+        const [, , invManagerSigner] = await hre.viem.getWalletClients(); //third signer (PK_INVESTOR_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.removeInvestor([taskArgs.wallet]);
+            const txnHash = await whiteList.write.removeInvestor([taskArgs.wallet], {account: invManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("investor removed")
+            console.log(`investor removed: ${taskArgs.wallet}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -56,11 +59,12 @@ task("removeInvestor")
 task("blockInvestor")
     .addParam("wallet")
     .setAction(async (taskArgs, hre) => {
+        const [, , invManagerSigner] = await hre.viem.getWalletClients(); //third signer (PK_INVESTOR_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.blockInvestor([taskArgs.wallet]);
+            const txnHash = await whiteList.write.blockInvestor([taskArgs.wallet], {account: invManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("investor blocked")
+            console.log(`investor blocked: ${taskArgs.wallet}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -69,11 +73,12 @@ task("blockInvestor")
 task("unblockInvestor")
     .addParam("wallet")
     .setAction(async (taskArgs, hre) => {
+        const [, , invManagerSigner] = await hre.viem.getWalletClients(); //third signer (PK_INVESTOR_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.unblockInvestor([taskArgs.wallet]);
+            const txnHash = await whiteList.write.unblockInvestor([taskArgs.wallet], {account: invManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("investor unlbocked")
+            console.log(`investor unblocked: ${taskArgs.wallet}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -83,11 +88,12 @@ task("addAllowedIsinType")
     .addParam("wallet")
     .addParam("isintype")
     .setAction(async (taskArgs, hre) => {
+        const [, , invManagerSigner] = await hre.viem.getWalletClients(); //third signer (PK_INVESTOR_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.addAllowedIsinType([taskArgs.wallet, taskArgs.isintype]);
+            const txnHash = await whiteList.write.addAllowedIsinType([taskArgs.wallet, taskArgs.isintype], {account: invManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("allowed isin type added")
+            console.log(`allowed isin type added: ${taskArgs.wallet} -> ${taskArgs.isintype}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -97,11 +103,12 @@ task("removeAllowedIsinType")
     .addParam("wallet")
     .addParam("isintype")
     .setAction(async (taskArgs, hre) => {
+        const [, , invManagerSigner] = await hre.viem.getWalletClients(); //third signer (PK_INVESTOR_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.removeAllowedIsinType([taskArgs.wallet, taskArgs.isintype]);
+            const txnHash = await whiteList.write.removeAllowedIsinType([taskArgs.wallet, taskArgs.isintype], {account: invManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("allowed isin type removed");
+            console.log(`allowed isin type removed: ${taskArgs.wallet} -> ${taskArgs.isintype}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -123,12 +130,15 @@ task("seedInvestors")
         await hre.run("addInvestor", {wallet: "0x1BeE699E58d8FFa0B130ff517217Fbad879b799a", investortype: "michal"});
         await hre.run("addInvestor", {wallet: "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73", investortype: "test1"});
         await hre.run("addInvestor", {wallet: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57", investortype: "test2"});
+        await hre.run("addInvestor", {wallet: "0x2c7cE9D04e8390ef21841C2C6D6aA14C2E459735", investortype: "test2"});
 
         await hre.run("seedAllowedInvestorsIsins", {});
     });
 
 task("seedAllowedInvestorsIsins")
     .setAction(async (taskArgs, hre) => {
+        await hre.run("addAllowedIsinType", { wallet: "0x2c7cE9D04e8390ef21841C2C6D6aA14C2E459735", isintype: "ES" });
+        await hre.run("addAllowedIsinType", { wallet: "0x2c7cE9D04e8390ef21841C2C6D6aA14C2E459735", isintype: "DB" });
         await hre.run("addAllowedIsinType", { wallet: "0xf22072224E1c58229802a9D7b4E5a7ba024E4650", isintype: "ES" });
         await hre.run("addAllowedIsinType", { wallet: "0xf22072224E1c58229802a9D7b4E5a7ba024E4650", isintype: "DB" });
         await hre.run("addAllowedIsinType", { wallet: "0x06D45E16FC20767A324e72949A767F5eb346B87a", isintype: "ES" });

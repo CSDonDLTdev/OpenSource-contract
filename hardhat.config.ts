@@ -10,8 +10,8 @@ import "./tasks/isinpermit"
 import "./tasks/isinescrow"
 require("dotenv").config();
 
-const TEST_PRIV_KEY = process.env.PRIVATE_KEY!;
-const token = process.env.BESU_TOKEN!;
+const TEST_PRIV_KEY = process.env.PRIVATE_KEY;
+const token = process.env.BESU_TOKEN;
 
 const config: HardhatUserConfig = {
   solidity: "0.8.24",
@@ -19,7 +19,7 @@ const config: HardhatUserConfig = {
     localhost: {
       chainId: 1337,
       url: "http://localhost:18545",
-      accounts: [TEST_PRIV_KEY],
+      accounts: TEST_PRIV_KEY ? [TEST_PRIV_KEY] : [],
       gasPrice: 0,
     },
     hardhat: {
@@ -27,14 +27,27 @@ const config: HardhatUserConfig = {
       initialBaseFeePerGas: 0,
       gasPrice: 0,
     },
-    besu_azure: {
+    besu_kdpw: {
+      chainId: 1337,
+      url: "http://68.221.29.67:8701",
+      initialBaseFeePerGas: 0,
+      gasPrice: 0,
+      accounts: 
+      [ 
+        process.env.PK_CC_OWNER!,
+        process.env.PK_ISIN_WL_MANAGER!,
+        process.env.PK_INVESTOR_WL_MANAGER!,
+        process.env.PK_ISIN_MINT_BURN_MANAGER!
+      ]
+    },
+    besu_azure: { 
       chainId: 1337,
       url: "http://kdpw-poc.polandcentral.cloudapp.azure.com:8545",
       httpHeaders: {
         "Authorization": "Bearer " + token,
       },
       gasPrice: 0,
-      accounts: [TEST_PRIV_KEY],
+      accounts: TEST_PRIV_KEY ? [TEST_PRIV_KEY] : [],
     },
     besu_azure_sign: {
       chainId: 1337,

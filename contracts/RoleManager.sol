@@ -1,9 +1,8 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract RoleManager is AccessControlUpgradeable, OwnableUpgradeable {
+contract RoleManager is AccessControlUpgradeable {
     bytes32 public constant ISIN_WL_MANAGER = keccak256("ISIN_WL_MANAGER");
     bytes32 public constant INVESTOR_WL_MANAGER = keccak256("INVESTOR_WL_MANAGER");
     bytes32 public constant ISIN_MINT_BURN_MANAGER = keccak256("ISIN_MINT_BURN_MANAGER");
@@ -14,7 +13,6 @@ contract RoleManager is AccessControlUpgradeable, OwnableUpgradeable {
     }
 
     function initialize() public initializer {
-        __Ownable_init(msg.sender);
         __AccessControl_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -22,11 +20,11 @@ contract RoleManager is AccessControlUpgradeable, OwnableUpgradeable {
 
     error UnauthorizedAccount(address caller, bytes32 role);
 
-    function grantRole(bytes32 role, address account) public override onlyOwner {
+    function grantRole(bytes32 role, address account) public override onlyRole(DEFAULT_ADMIN_ROLE) {
         super.grantRole(role, account);
     }
 
-    function revokeRole(bytes32 role, address account) public override onlyOwner {
+    function revokeRole(bytes32 role, address account) public override onlyRole(DEFAULT_ADMIN_ROLE) {
         super.revokeRole(role, account);
     }
 

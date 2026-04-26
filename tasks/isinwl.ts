@@ -22,10 +22,12 @@ task("addIsin")
     .addParam("cfi")
     .setAction(async (taskArgs, hre) => {
         const whiteList = await getContract(hre);
+        const [, isinManagerSigner] = await hre.viem.getWalletClients(); //second signer (PK_ISIN_WL_MANAGER)
         try {
-            const txnHash = await whiteList.write.addIsin([taskArgs.isin, taskArgs.isintype, taskArgs.name, taskArgs.shortname, taskArgs.issuername, taskArgs.issuercode, taskArgs.cfi]);
+            const txnHash = await whiteList.write.addIsin([taskArgs.isin, taskArgs.isintype, taskArgs.name, taskArgs.shortname, taskArgs.issuername, taskArgs.issuercode, taskArgs.cfi], 
+                                                          { account: isinManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("isin created")
+            console.log(`isin created: ${taskArgs.isin}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -41,10 +43,12 @@ task("modifyIsinAttributes")
     .addParam("cfi")
     .setAction(async (taskArgs, hre) => {
         const whiteList = await getContract(hre);
+        const [, isinManagerSigner] = await hre.viem.getWalletClients(); //second signer (PK_ISIN_WL_MANAGER)
         try {
-            const txnHash = await whiteList.write.modifyIsinAttributes([taskArgs.isin, taskArgs.isintype, taskArgs.name, taskArgs.shortname, taskArgs.issuername, taskArgs.issuercode, taskArgs.cfi]);
+            const txnHash = await whiteList.write.modifyIsinAttributes([taskArgs.isin, taskArgs.isintype, taskArgs.name, taskArgs.shortname, taskArgs.issuername, taskArgs.issuercode, taskArgs.cfi], 
+                                                          { account: isinManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("isin modified");
+            console.log(`isin modified: ${taskArgs.isin}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -53,11 +57,12 @@ task("modifyIsinAttributes")
 task("removeIsin")
     .addParam("isin")
     .setAction(async (taskArgs, hre) => {
+        const [, isinManagerSigner] = await hre.viem.getWalletClients(); //second signer (PK_ISIN_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.removeIsin([taskArgs.isin]);
+            const txnHash = await whiteList.write.removeIsin([taskArgs.isin], {account: isinManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("isin removed")
+            console.log(`isin removed: ${taskArgs.isin}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -66,11 +71,12 @@ task("removeIsin")
 task("blockIsin")
     .addParam("isin")
     .setAction(async (taskArgs, hre) => {
+        const [, isinManagerSigner] = await hre.viem.getWalletClients(); //second signer (PK_ISIN_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.blockIsin([taskArgs.isin]);
+            const txnHash = await whiteList.write.blockIsin([taskArgs.isin], {account: isinManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("isin blocked")
+            console.log(`isin blocked: ${taskArgs.isin}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }
@@ -79,11 +85,12 @@ task("blockIsin")
 task("unblockIsin")
     .addParam("isin")
     .setAction(async (taskArgs, hre) => {
+        const [, isinManagerSigner] = await hre.viem.getWalletClients(); //second signer (PK_ISIN_WL_MANAGER)
         const whiteList = await getContract(hre);
         try {
-            const txnHash = await whiteList.write.unblockIsin([taskArgs.isin]);
+            const txnHash = await whiteList.write.unblockIsin([taskArgs.isin], {account: isinManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
-            console.log("isin unlbocked")
+            console.log(`isin unlbocked: ${taskArgs.isin}`);
         } catch (error: any) {
             await handleContractError(hre, error)
         }

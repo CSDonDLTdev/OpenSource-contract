@@ -24,6 +24,7 @@ task("mint")
     .addParam("account", "address where tokens will be stored")
     .addParam("amount", "number of tokens to mint")
     .setAction(async (taskArgs, hre) => {
+        const [, , , mintManagerSigner] = await hre.viem.getWalletClients(); //fourth signer (PK_ISIN_MINT_BURN_MANAGER)
         const isin = await getIsin(hre, taskArgs.isin);
         if (!isin) {
             console.error(`Isin not found: ${taskArgs.isin}`)
@@ -35,7 +36,7 @@ task("mint")
             isin.addr
         );
         try {
-            const txnHash = await token.write.mint([taskArgs.account, taskArgs.amount]);
+            const txnHash = await token.write.mint([taskArgs.account, taskArgs.amount], {account: mintManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
             console.log(`Token ${isin.isin}:${isin.addr} minted: ${taskArgs.amount} to: ${taskArgs.account}`)
         } catch (error: any) {
@@ -48,6 +49,7 @@ task("burn")
     .addParam("account", "address where tokens will be burnt")
     .addParam("amount", "number of tokens to burn")
     .setAction(async (taskArgs, hre) => {
+        const [, , , burnManagerSigner] = await hre.viem.getWalletClients(); //fourth signer (PK_ISIN_MINT_BURN_MANAGER)
         const isin = await getIsin(hre, taskArgs.isin);
         if (!isin) {
             console.error(`Isin not found: ${taskArgs.isin}`)
@@ -58,7 +60,7 @@ task("burn")
             isin.addr
         );
         try {
-            const txnHash = await token.write.burn([taskArgs.account, taskArgs.amount]);
+            const txnHash = await token.write.burn([taskArgs.account, taskArgs.amount], {account: burnManagerSigner.account});
             await waitForTransactionReceipt(hre, txnHash);
             console.log(`Token ${isin.isin}:${isin.addr} owner: ${await token.read.owner()}, burnt: ${taskArgs.amount}`)
         } catch (error: any) {

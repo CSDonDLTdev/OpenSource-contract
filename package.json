@@ -7,25 +7,31 @@
     "build": "npx hardhat compile",
     "test": "hardhat test",
     "start_local": "hardhat node --port 18545",
-
     "get_azure_token": "./get_besu_token.sh http://kdpw-poc.polandcentral.cloudapp.azure.com:8545",
 
+    "deploy_besu": "hardhat run scripts/deploy.ts --network besu_kdpw",
+    "seedRoles_besu": "npx hardhat seedRoles --network besu_kdpw",
+    "seedIsins_besu": "npx hardhat seedIsins --network besu_kdpw",
+    "listIsins_besu": "npx hardhat listIsins --network besu_kdpw",
+
+    "seedInvestors_besu": "npx hardhat seedInvestors --network besu_kdpw",
+    "mint_besu": "npx hardhat mint --isin \"PLPKN0000018\" --account 0x2c7cE9D04e8390ef21841C2C6D6aA14C2E459735 --amount 900 --network besu_kdpw",
+    "burn_besu": "npx hardhat burn --isin \"PLPKN0000018\" --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 110 --network besu_kdpw",
+    "balance_besu": "npx hardhat balance --isin \"PLPKN0000018\" --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_kdpw",
+    "totalSupply_besu": "npx hardhat totalSupply --isin \"PLPKN0000018\" --network besu_kdpw",
+
+
     "deploy_azure": "npm run get_azure_token && hardhat run scripts/deploy.ts --network besu_azure",
-
-
     "seedIsins_azure": "npm run get_azure_token && npx hardhat seedIsins --network besu_azure",
     "seedInvestors_azure": "npm run get_azure_token && npx hardhat seedInvestors --network besu_azure",
     "mintIsinsToTestInvestors_azure": "npm run get_azure_token && npx hardhat mintIsinsToTestInvestors --network besu_azure",
-
     "seedAll_azure": "npm run get_azure_token && npx hardhat grantRole --role ISIN_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure  && npx hardhat grantRole --role INVESTOR_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure && npx hardhat grantRole --role ISIN_MINT_BURN_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure && npx hardhat seedIsins --network besu_azure && npx hardhat seedInvestors --network besu_azure && npx hardhat mintIsinsToTestInvestors --network besu_azure",
-
     "listIsins_azure": "npm run get_azure_token && npx hardhat listIsins --network besu_azure",
     "addIsin_azure": "npm run get_azure_token && npx hardhat addIsin --isin \"US1234567890\" --isintype \"ES\" --name \"Company A\" --shortname \"CompA\" --issuername \"IssuerA\" --issuercode \"ISSA\" --cfi \"CFI001\" --network besu_azure",
     "modifyIsinAttributes_azure": "npm run get_azure_token && npx hardhat modifyIsinAttributes --isin \"US1234567890\" --isintype \"DB\" --name \"Company B\" --shortname \"CompB\" --issuername \"IssuerB\" --issuercode \"ISSB\" --cfi \"CFI002\" --network besu_azure",
     "removeIsin_azure": "npm run get_azure_token && npx hardhat removeIsin --isin \"US1234567890\" --network besu_azure",
     "blockIsin_azure": "npm run get_azure_token && npx hardhat blockIsin --isin \"US1234567890\" --network besu_azure",
     "unblockIsin_azure": "npm run get_azure_token && npx hardhat unblockIsin --isin \"US1234567890\" --network besu_azure",
-
     "listInvestors_azure": "npm run get_azure_token && npx hardhat listInvestors --network besu_azure",
     "addInvestor_azure": "npm run get_azure_token && npx hardhat addInvestor --wallet 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --investortype \"abcd\" --network besu_azure",
     "addInvestor2_azure": "npm run get_azure_token && npx hardhat addInvestor --wallet 0x1BeE699E58d8FFa0B130ff517217Fbad879b799a --investortype \"efgh\" --network besu_azure",
@@ -35,56 +41,40 @@
     "unblockInvestor_azure": "npm run get_azure_token && npx hardhat unblockInvestor --wallet 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
     "addAllowedIsinType_azure": "npm run get_azure_token && npx hardhat addAllowedIsinType --wallet 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --isintype \"ES\" --network besu_azure",
     "removeAllowedIsinType_azure": "npm run get_azure_token && npx hardhat removeAllowedIsinType --wallet 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --isintype \"ES\" --network besu_azure",
-
     "mint_azure": "npm run get_azure_token && npx hardhat mint --isin \"PLOPTTC00011\" --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 90 --network besu_azure",
     "burn_azure": "npm run get_azure_token && npx hardhat burn --isin \"PLPKN0000018\" --account 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --amount 110 --network besu_azure",
     "balance_azure": "npm run get_azure_token && npx hardhat balance --isin \"PLPKN0000018\" --account 0x06D45E16FC20767A324e72949A767F5eb346B87a --network besu_azure",
     "totalSupply_azure": "npm run get_azure_token && npx hardhat totalSupply --isin \"US1234567890\" --network besu_azure",
     "mint_all_tokens_azure": "npm run get_azure_token && npx hardhat mint_all_tokens --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 90 --network besu_azure",
-
     "transfer_azure": "npm run get_azure_token && npx hardhat transfer --isin \"PLOPTTC00011\" --from 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --fromprivatekey 8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63 --to 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 1 --customvalue 800 --network besu_azure",
-
     "create_escrow_azure": "npm run get_azure_token && npx hardhat escrowCreate --isin \"PLOPTTC00011\" --from 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --to 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --amount 11 --customvalue 314 --network besu_azure",
-
     "cancel_escrow_azure": "npm run get_azure_token && npx hardhat escrowCancel --sender 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --orderhash 0xe8a9b72ea9e6a4f2ce3e5d02d071c956319d76f006ef252411b2e2e924674bf6 --network besu_azure",
     "reject_escrow_azure": "npm run get_azure_token && npx hardhat escrowReject --recipient 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --orderhash 0x998c5ea4796214fcc3c8b86e6f6722012e7faa3ec0c59b8d095cfcc81418a58b --recipientprivatekey 8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63 --network besu_azure",
     "accept_escrow_azure": "npm run get_azure_token && npx hardhat escrowAccept --recipient 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --orderhash 0xefd645e26703cc52f2029c9966803d24122dd2fa8d6846edbff10a66072d900f --recipientprivatekey 8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63 --network besu_azure",
-
     "grantIsinManagerRole_azure": "npm run get_azure_token && npx hardhat grantRole --role ISIN_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
     "revokeIsinManagerRole_azure": "npm run get_azure_token && npx hardhat revokeRole --role ISIN_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
     "hasIsinManagerRole_azure": "npm run get_azure_token && npx hardhat hasRole --role ISIN_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
-
     "grantInvestorManagerRole_azure": "npm run get_azure_token && npx hardhat grantRole --role INVESTOR_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
     "revokeInvestorManagerRole_azure": "npm run get_azure_token && npx hardhat revokeRole --role INVESTOR_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
     "hasInvestorManagerRole_azure": "npm run get_azure_token && npx hardhat hasRole --role INVESTOR_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
-
     "grantMintBurnManagerRole_azure": "npm run get_azure_token && npx hardhat grantRole --role ISIN_MINT_BURN_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
     "revokeMintBurnManagerRole_azure": "npm run get_azure_token && npx hardhat revokeRole --role ISIN_MINT_BURN_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
     "hasMintBurnManagerRole_azure": "npm run get_azure_token && npx hardhat hasRole --role ISIN_MINT_BURN_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network besu_azure",
-
     "upgrade_roleManager_azure": "npm run get_azure_token && hardhat run scripts/update_roleManager.ts --network besu_azure",
     "upgrade_isinWhitelist_azure": "npm run get_azure_token && hardhat run scripts/update_isinWhitelist.ts --network besu_azure",
     "upgrade_investorWhitelist_azure": "npm run get_azure_token && hardhat run scripts/update_investorWhitelist.ts --network besu_azure",
     "upgrade_token_azure": "npm run get_azure_token && hardhat run scripts/update_Token.ts --network besu_azure",
-
     "get_nonce_azure": "npm run get_azure_token && npx hardhat get_nonce --isin \"PLOPTTC00011\" --from 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --network besu_azure",
     "sign_azure": "npx hardhat sign --nonce 1 --isin \"PLOPTTC00011\" --isinaddr 0x39c3221d8475ab9c88bd2b6701f32f153b6e8939 --from 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --privatekey 8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63 --to 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 1 --customvalue 800 --network besu_azure_sign",
     "transfer_with_signature_azure": "npm run get_azure_token && npx hardhat transfer_signed --deadline 1733416685 --signature \"0xe968f9814c4bd13ba1d370d9e4c2aec7e01f7e4a719364309e9ad3733cdd7d925ec1df551a038696d14d0faa64ef0e6abf5cd79c7794832d5209faf08e0f7e371c\" --isin \"PLOPTTC00011\" --from 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --to 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 1 --customvalue 800 --network besu_azure",
-
-
-
-
-
     "deploy_local": "hardhat run scripts/deploy.ts --network localhost",
     "deploy_second_net": "hardhat run scripts/deploy_second_net.ts --network localhost",
-
     "listIsins_local": "npx hardhat listIsins --network localhost",
     "addIsin_local": "npx hardhat addIsin --isin \"US1234567890\" --isintype \"ES\" --name \"Company A\" --shortname \"CompA\" --issuername \"IssuerA\" --issuercode \"ISSA\" --cfi \"CFI001\" --network localhost",
     "modifyIsinAttributes_local": "npx hardhat modifyIsinAttributes --isin \"US1234567890\" --isintype \"DB\" --name \"Company B\" --shortname \"CompB\" --issuername \"IssuerB\" --issuercode \"ISSB\" --cfi \"CFI002\" --network localhost",
     "removeIsin_local": "npx hardhat removeIsin --isin \"US1234567890\" --network localhost",
     "blockIsin_local": "npx hardhat blockIsin --isin \"US1234567890\" --network localhost",
     "unblockIsin_local": "npx hardhat unblockIsin --isin \"US1234567890\" --network localhost",
-
     "listInvestors_local": "npx hardhat listInvestors --network localhost",
     "addInvestor_local": "npx hardhat addInvestor --wallet 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --investortype \"abcd\" --network localhost",
     "addInvestor2_local": "npx hardhat addInvestor --wallet 0x1BeE699E58d8FFa0B130ff517217Fbad879b799a --investortype \"efgh\" --network localhost",
@@ -95,34 +85,25 @@
     "addAllowedIsinType_local": "npx hardhat addAllowedIsinType --wallet 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --isintype \"ES\" --network localhost",
     "addAllowedIsinType2_local": "npx hardhat addAllowedIsinType --wallet 0x1BeE699E58d8FFa0B130ff517217Fbad879b799a --isintype \"ES\" --network localhost",
     "removeAllowedIsinType_local": "npx hardhat removeAllowedIsinType --wallet 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --isintype \"ES\" --network localhost",
-
     "mint_local": "npx hardhat mint --isin \"US1234567890\" --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 90 --network localhost",
     "burn_local": "npx hardhat burn --isin \"US1234567890\" --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 190 --network localhost",
     "balance_local": "npx hardhat balance --isin \"US1234567890\" --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
     "totalSupply_local": "npx hardhat totalSupply --isin \"US1234567890\" --network localhost",
     "mint_all_tokens_local": "npx hardhat mint_all_tokens --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --amount 90 --network localhost",
-
     "transfer_local": "npx hardhat transfer --isin \"US1234567890\" --from 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --to 0x1BeE699E58d8FFa0B130ff517217Fbad879b799a --amount 8 --customvalue 20000 --network localhost",
-
     "grantIsinManagerRole_local": "npx hardhat grantRole --role ISIN_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
     "revokeIsinManagerRole_local": "npx hardhat revokeRole --role ISIN_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
     "hasIsinManagerRole_local": "npx hardhat hasRole --role ISIN_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
-
     "grantInvestorManagerRole_local": "npx hardhat grantRole --role INVESTOR_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
     "revokeInvestorManagerRole_local": "npx hardhat revokeRole --role INVESTOR_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
     "hasInvestorManagerRole_local": "npx hardhat hasRole --role INVESTOR_WL_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
-
     "grantMintBurnManagerRole_local": "npx hardhat grantRole --role ISIN_MINT_BURN_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
     "revokeMintBurnManagerRole_local": "npx hardhat revokeRole --role ISIN_MINT_BURN_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
     "hasMintBurnManagerRole_local": "npx hardhat hasRole --role ISIN_MINT_BURN_MANAGER --account 0xf22072224E1c58229802a9D7b4E5a7ba024E4650 --network localhost",
-
-
-
     "upgrade_roleManager_local": "hardhat run scripts/update_roleManager.ts --network localhost",
     "upgrade_isinWhitelist_local": "hardhat run scripts/update_isinWhitelist.ts --network localhost",
     "upgrade_investorWhitelist_local": "hardhat run scripts/update_investorWhitelist.ts --network localhost",
     "upgrade_token_local": "hardhat run scripts/update_Token.ts --network localhost"
-
   },
   "author": "Michał Siemiński",
   "license": "UNLICENSED",
@@ -137,7 +118,7 @@
     "dotenv": "^16.4.5",
     "ethers": "^6.12.1",
     "ethers-decode-error": "^2.1.3",
-    "hardhat": "^2.22.2",
+    "hardhat": "^2.28.6",
     "viem": "^2.9.16"
   }
 }
